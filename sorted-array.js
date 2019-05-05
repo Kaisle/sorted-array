@@ -8,6 +8,26 @@ var SortedArray = (function () {
                 index    = 0;
             while (index < length) this.insert(array[index++]);
         },
+        ceil: function (element) {
+            var array   = this.array,
+                compare = this.compare,
+                high    = array.length-1,
+                low     = 0,
+                // In most languages, inner variable declaration makes the code slower.
+                index,
+                ordering;
+
+            while (high >= low) {
+                index    = (high + low) / 2 >>> 0;
+                ordering = compare(array[index], element);
+
+                     if (ordering < 0) low  = index + 1;
+                else if (ordering > 0) high = index - 1;
+                else return index;
+            }
+
+            return index;
+        },
         insert: function (element) {
             var array   = this.array,
                 compare = this.compare,
@@ -20,7 +40,7 @@ var SortedArray = (function () {
             // The array is sorted. You must find the position of new element in O(log(n)), not O(n).
             while (high >= low) {
                 index    = (high + low) / 2 >>> 0;
-                ordering = compare(array[index], element);                
+                ordering = compare(array[index], element);
                 if (ordering < 0) low  = index + 1;
                 else if (ordering > 0) high = index - 1;
                 else {
@@ -43,7 +63,7 @@ var SortedArray = (function () {
             }
             index = array.length;
             // Just to increase array size.
-            array.push(element);            
+            array.push(element);
             // Much faster. No need to elements swap.
             while (index > pos) {
                 array[index] = array[--index];
